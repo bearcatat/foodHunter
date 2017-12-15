@@ -1,0 +1,64 @@
+<% include head %>
+<script type="text/javascript" src="/javascripts/registe.js"></script>
+<script type="text/javascript" src="/javascripts/dropdown.js"></script>
+<div class="ui middle aligned center aligned grid registe">
+  <div class="column">
+    <div class="ui centered card" style="width: 650px;">
+      <form class="ui large form" style="padding:30px;">
+        <div class="field">
+          <label for="">学号</label>
+          <input type="text" name="id">
+        </div>
+        <div class="field">
+            <label for="">昵称</label>
+            <input type="text" name="nickname">
+        </div>
+        <div class="field">
+            <label for="">性别</label>
+            <div class="ui fluid selection dropdown item">
+              <input type="hidden" name="sex">
+              <i class="dropdown icon"></i>
+              <div class="default text">女</div>
+              <div class="menu">
+                <div class="item" data-value=""></div>                         
+                <div class="item" data-value="男">男</div>       
+                <div class="item" data-value="女">女</div>                                    
+              </div>
+            </div>
+        </div>
+        <div class="field">
+            <label for="">年级</label>
+            <div class="ui fluid selection dropdown item">
+              <input type="hidden" name="grade">
+              <i class="dropdown icon"></i>
+              <div class="default text">大一</div>
+              <div class="menu">
+                <div class="item" data-value=""></div>                         
+                <div class="item" data-value="大一">大一</div>       
+                <div class="item" data-value="大二">大二</div>       
+                <div class="item" data-value="大三">大三</div> 
+                <div class="item" data-value="大四">大四</div>                                       
+                <div class="item" data-value="研一">研一</div>  
+                <div class="item" data-value="研二">研二</div>                                       
+              </div>
+            </div>
+        </div>
+        <div class="field">
+            <label for="">专业</label>
+            <input type="text" name="major">
+        </div>
+        <div class="field">
+            <label for="">宿舍</label>
+            <input type="text" name="dormitory">
+        </div>
+        <div class="field">
+            <label for="">手机号</label>
+            <input type="text" name="phone_number">
+        </div>
+        <button class="ui fluid large teal submit button"  type="submit">Login</button>  
+      </form>
+    </div>
+  </div>
+</div>
+<% include foot %>
+

@@ -1,0 +1,106 @@
+<% include head %>
+  <script type="text/javascript" src="/javascripts/canteen.js"></script>
+  <script type="text/javascript" src="/javascripts/dropdown.js"></script>  
+  <div class="ui large top inverted menu main">
+    <div class="ui container">
+      <a href="/" class="header item">首页</a>       
+      <div class="item">订单</div>     
+      <div class="right menu">
+        <div class="ui pointing dropdown link item">
+          <%= user %>
+          <div class="menu">
+            <a href="\info" class="item">我的信息</a>
+            <div class="item">我的订单</div>            
+          </div>
+        </div>
+        <a href="\login" class="item">登出</a>                
+      </div> 
+    </div>
+  </div>
+  <div class="ui container main" id="canteen">
+    <div class="ui grid">
+      <div class="twelve wide column">
+          <div class="ui three column doubling segment grid">
+            <% dish.forEach(function(d){ %>
+              <div class="column">
+                <div class="ui card">
+                  <img src="/images/<%= d.picture %>" alt="" class="ui medium image"  onclick="showDetail(<%= d.id%>)" style="cursor:pointer;">
+                  <div class="content">
+                    <div class="header">
+                        <%= d.dish_name %>
+                        <i class="add circle icon right floated" id="cb-<%= d.id %> " style="cursor:pointer;"></i>
+                        <span class="right floated" id="c-<%= d.id %>" style="text-align: center;width: 30px;color:#aaa; font-size:17px;display:none;">0</span>
+                        <i class="minus circle icon right floated" id="cb-<%= d.id %>" style="display:none;cursor:pointer;"></i>
+                    </div>
+                  </div>
+                  <div class="extra content">
+                    <label for="">评分:</label>
+                    <div data-rating="<%= d.score %>" data-max-rating="5" class="ui small star rating"></div>
+                    <label class="right floated" for="">价格:<span style="color:red"><%= d.price %></span> </label>                              
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>             
+      </div>
+      <div class="four wide column">
+          <div class="ui sticky" >
+            <!-- <div class="ui attached segment header">
+              购物车
+            </div> -->
+            <div class="ui segments" style="margin:1rem 0;">
+              <div class="ui segment">
+                购物车
+              </div>
+              <div class="shopping contents ui segments" style="margin:0;">
+                <!-- <div class="ui clearing segment">
+                    油封鲑鱼
+                  <span style="text-align: center;width: 30px;color:rgb(255, 0, 0); font-size:17px;float:right;">￥12</span>                            
+                  <i class="ui add mini icon" style="float:right;line-height: 1.5;"></i>
+                  <span style="text-align: center;width: 14px;color:#aaa; font-size:17px;float:right;">0</span>                  
+                  <i class="ui minus mini icon" style="float:right;line-height: 1.5;"></i>        
+                </div> -->
+              </div>
+              <div class="ui right aligned segment summary">
+                共<span class="summary num">0</span>份,总计￥<span class="summary money" style="text-align: center;width: 30px;color:rgb(255, 0, 0); font-size:17px;" >0</span>                    
+              </div>
+              <div class="ui clearing segment">
+                <div class="ui right floated red mini button">下单</div>
+              </div>
+            </div>
+          </div>
+      </div>          
+    </div>
+  </div>
+  <% dish.forEach(function(d){ %>
+    <div class="ui modal" id="<%= d.id %>">
+      <i class="close icon"></i>
+      <div class="header">
+        <%= d.dish_name %>
+      </div>
+      <div class="image content">
+        <div class="ui image" style="width:50%">
+          <img src="/images/<%= d.picture %>">
+        </div>
+        <div class="description" style="width:50%">
+          <div class="ui top attached tabular menu">
+            <a class="item active" data-tab="first">描述</a>
+            <a class="item" data-tab="second">评价</a>
+          </div>
+          <div class="ui bottom attached tab segment active" data-tab="first">
+            <p><%= d.description %></p>              
+          </div>
+          <div class="ui bottom attached tab segment" data-tab="second">
+            Second
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="minus circular ui icon button" id="b-<%= d.id %>" style="display:none;"><i class="minus icon" style="cursor:pointer"></i> </button>
+        <span id="d-<%= d.id %>" style="text-align: center;width: 40px;color:rgb(0, 0, 0);display:none;">0</span>    
+        <button class="add circular ui icon button" id="b-<%= d.id %>"><i class="add icon" style="cursor:pointer;"  ></i></button>    
+      </div>
+    </div>
+  <% }) %>
+<% include foot %>
+

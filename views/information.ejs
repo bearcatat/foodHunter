@@ -1,0 +1,94 @@
+<% include head %>
+  <script type="text/javascript" src="/javascripts/dropdown.js"></script>  
+  <script type="text/javascript" src="/javascripts/info.js"></script>    
+  <div class="ui large top inverted menu main">
+    <div class="ui container">
+      <a href="/" class="header item">首页</a> 
+      <div class="item">订单</div>     
+      <div class="right menu">
+        <div class="ui pointing dropdown link item">
+          <%= user %>
+          <div class="menu">
+            <div class="active item">我的信息</div>
+            <div class="item">我的订单</div>            
+          </div>
+        </div>
+        <a href="\login" class="item">登出</a>        
+      </div> 
+    </div>
+  </div>
+  <div class="ui segment container">
+    <h3 class="ui header">我的信息</h3>
+    <form class="ui large form" style="padding:30px;">
+      <div class="inline fields">
+        <label class="l" for="">学号:</label>
+        <div class="field">
+          <div class="ui mini disabled input">
+            <input type="text" name="id" value="<%= userInfo.id %>">                          
+          </div>
+        </div>
+        <span for="">请联系管理员</span>        
+      </div>
+      <div class="inline fields">
+        <label class="l" for="">昵称:</label>
+        <div class="field">
+          <div class="ui mini input">
+              <input type="text" name="nickname" value="<%= userInfo.nickname %>">              
+          </div>
+        </div>
+      </div>
+      <div class="inline fields">
+        <label class="l" for="">性别:</label>
+        <div class="field">
+          <div class="ui fluid selection dropdown item mini input">
+            <input type="hidden" name="sex" value="<%= userInfo.sex %>">
+            <i class="dropdown icon"></i>
+            <div class="default text"><%= userInfo.sex %></div>
+            <div class="menu">                    
+              <div class="item" data-value="男">男</div>       
+              <div class="item" data-value="女">女</div>                                    
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="inline fields">
+        <label class="l" for="">年级:</label>
+        <div class="field">
+          <div class="ui fluid selection dropdown item mini input">
+            <input type="hidden" name="grade" value="<%= userInfo.grade %>">
+            <i class="dropdown icon"></i>
+            <div class="default text"><%= userInfo.grade %></div>
+            <div class="menu">
+              <div class="item" data-value="大一">大一</div>       
+              <div class="item" data-value="大二">大二</div>       
+              <div class="item" data-value="大三">大三</div> 
+              <div class="item" data-value="大四">大四</div>                                       
+              <div class="item" data-value="研一">研一</div>  
+              <div class="item" data-value="研二">研二</div>                                       
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="inline fields">
+        <label class="l" for="">专业:</label>
+        <div class="ui mini input">
+          <input type="text" name="major" value="<%= userInfo.major %>">
+        </div>
+      </div>
+      <div class="inline fields">
+        <label class="l" for="">宿舍:</label>
+        <div class="ui mini input">
+          <input type="text" name="dormitory" value="<%= userInfo.dormitory %>">
+        </div>              
+      </div>
+      <div class="inline fields">          
+        <label class="l" for="">手机号:</label>
+        <div class="ui mini input">
+          <input type="text" name="phone_number" value="<%= userInfo.phone_number %>">
+        </div>   
+      </div>
+      <button class="ui teal submit button"  type="submit">保存</button>  
+    </form>
+  </div>
+<% include foot %>
+

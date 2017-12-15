@@ -1,0 +1,33 @@
+body>.login,
+body>.registe {
+  background: url(/images/loginbg.png);
+  background-size: cover;
+}
+
+body .login .card {
+  width: 450px;
+}
+
+
+
+
+body .login.grid,body .registe.grid {
+  height: 100%;
+}
+
+body .menu.main{
+  margin: 0;
+}
+
+body .main.container{
+  min-height: 100%;
+  margin-top: 3em;
+}
+
+body .container{
+  min-height: 100%;
+}
+
+span{
+  color:#aaa;
+}
