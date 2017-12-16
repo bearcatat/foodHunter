@@ -4,7 +4,7 @@
   <div class="ui large top inverted menu main">
     <div class="ui container">
       <a href="/" class="header item">首页</a>       
-      <div class="item">订单</div>     
+      <a href="/reward" class="item">订单</a>     
       <div class="right menu">
         <div class="ui pointing dropdown link item">
           <%= user %>
@@ -19,7 +19,7 @@
   </div>
   <div class="ui container main" id="canteen">
     <div class="ui grid">
-      <div class="twelve wide column">
+      <div class="twelve wide column dish">
           <div class="ui three column doubling segment grid">
             <% dish.forEach(function(d){ %>
               <div class="column">
@@ -35,7 +35,7 @@
                   </div>
                   <div class="extra content">
                     <label for="">评分:</label>
-                    <div data-rating="<%= d.score %>" data-max-rating="5" class="ui small star rating"></div>
+                    <div data-rating="<%= d.score %>" data-max-rating="5" class="ui dish small star rating"></div>
                     <label class="right floated" for="">价格:<span style="color:red"><%= d.price %></span> </label>                              
                   </div>
                 </div>
@@ -45,27 +45,17 @@
       </div>
       <div class="four wide column">
           <div class="ui sticky" >
-            <!-- <div class="ui attached segment header">
-              购物车
-            </div> -->
             <div class="ui segments" style="margin:1rem 0;">
               <div class="ui segment">
                 购物车
               </div>
               <div class="shopping contents ui segments" style="margin:0;">
-                <!-- <div class="ui clearing segment">
-                    油封鲑鱼
-                  <span style="text-align: center;width: 30px;color:rgb(255, 0, 0); font-size:17px;float:right;">￥12</span>                            
-                  <i class="ui add mini icon" style="float:right;line-height: 1.5;"></i>
-                  <span style="text-align: center;width: 14px;color:#aaa; font-size:17px;float:right;">0</span>                  
-                  <i class="ui minus mini icon" style="float:right;line-height: 1.5;"></i>        
-                </div> -->
               </div>
               <div class="ui right aligned segment summary">
                 共<span class="summary num">0</span>份,总计￥<span class="summary money" style="text-align: center;width: 30px;color:rgb(255, 0, 0); font-size:17px;" >0</span>                    
               </div>
               <div class="ui clearing segment">
-                <div class="ui right floated red mini button">下单</div>
+                <div class="ui right floated red mini button" onclick="summit()">下单</div>
               </div>
             </div>
           </div>
@@ -78,7 +68,7 @@
       <div class="header">
         <%= d.dish_name %>
       </div>
-      <div class="image content">
+      <div class="image scrolling  content">
         <div class="ui image" style="width:50%">
           <img src="/images/<%= d.picture %>">
         </div>
@@ -91,7 +81,29 @@
             <p><%= d.description %></p>              
           </div>
           <div class="ui bottom attached tab segment" data-tab="second">
-            Second
+              <div class="ui comments">
+                <form class="ui comment form" id="co-<%= d.id %>">
+                  <div class="field">
+                    <textarea style="height: 1.8em;" name="text"></textarea>
+                  </div>
+                  <div data-max-rating="5" class="ui comment small star rating" id="so-<%= d.id %>"></div>                  
+                  <div class="ui blue labeled submit icon button" onclick="onSummitComment(<%= d.id %>)" style="float:right">
+                    <i class="icon edit"></i> 发表
+                  </div>
+                </form>
+                <div class="comment">
+                  <div class="content">
+                    <a class="author">Matt</a>
+                    <div class="metadata">
+                      <div data-rating="4" data-max-rating="5" class="ui small dish star rating"></div>
+                      <span class="date">Today at 5:42PM</span>
+                    </div>
+                    <div class="text">
+                      How artistic!
+                    </div>
+                  </div>
+                </div>
+              </div> 
           </div>
         </div>
       </div>
@@ -102,5 +114,50 @@
       </div>
     </div>
   <% }) %>
+  <div class="ui basic summit modal">
+    <i class="close icon"></i>
+    <div class="content">
+      <form class="ui dish form" style="margin:2rem 5rem" >
+        <div class="field">
+          <label style="color:aqua">赏金</label>
+          <input type="text" name="fee" placeholder="赏金">
+        </div>
+        <div class="field">
+          <label style="color:aqua">地址</label>
+          <input type="text" name="location" placeholder="地址">
+        </div>
+        <!-- <div class="inline fields">
+          <label style="color:aqua">期望到达时间</label>
+          <div class="field">
+            <input type="text" name="hour" placeholder="时">
+            <input type="text" name="min" placeholder="分">
+          </div>
+        </div> -->
+        <div class="field">
+            <label style="color:aqua">预期到达时间</label>
+            <div class="ui fluid selection dropdown item">
+              <input type="hidden" name="expect_time">
+              <i class="dropdown icon"></i>
+              <div class="default text">半小时</div>
+              <div class="menu">
+                <div class="item" data-value="30"></div>                         
+                <div class="item" data-value="30">半小时</div>       
+                <div class="item" data-value="60">一小时</div>                                    
+              </div>
+            </div>
+        </div>
+      </form>
+    </div>
+    <div class="actions">  
+      <div class="ui red basic cancel inverted button">
+        <i class="remove icon"></i>
+        取消悬赏
+      </div>
+      <div class="ui green ok inverted positive button" style="margin-right:5.5rem">
+        <i class="checkmark icon"></i>
+        悬赏
+      </div>
+    </div>
+  </div>
 <% include foot %>
 

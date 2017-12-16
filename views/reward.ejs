@@ -1,0 +1,170 @@
+<% include head %>
+  <script type="text/javascript" src="/javascripts/reward.js"></script>
+  <div class="ui large top inverted menu main">
+    <div class="ui container">
+      <a href="/" class="header item">首页</a>       
+      <div class="active item">订单</div>     
+      <div class="right menu">
+        <div class="ui pointing dropdown link item">
+          <%= user %>
+          <div class="menu">
+            <a href="\info" class="item">我的信息</a>
+            <div class="item">我的订单</div>            
+          </div>
+        </div>
+        <a href="\login" class="item">登出</a>                
+      </div> 
+    </div>
+  </div>
+  <div class="ui container main">
+    <div class="ui grid">
+      <div class="four wide column">
+        <div class="ui vertical fluid tabular menu">
+          <a class="item active" data-tab="first">
+            悬赏
+          </a>
+          <a class="item" data-tab="second">
+            任务
+          </a>
+          <a class="item" data-tab="third">
+            我的悬赏
+          </a>
+        </div>
+      </div>
+      <div class="twelve wide stretched column">
+        <div class="ui active tab segments" data-tab="first" style="margin:1rem 0;">
+          <% orderlistsBefore.forEach(function(o){ %>
+            <div class="ui orderlist before segment" id="l-<%= o.id %>" data-id="<%= o.id %>">
+              <div class="header">悬赏人：<%= o.guest_name %> <span><%= o.order_time %></span><span style="float:right;">悬赏金</span></div>
+              <p style="float:right;margin:0;"><%= o.fee %></p>
+              <p style="margin:0;"> 期望时间:<%= o.expect_time %></p>                                      
+              <div class="content">
+                <button data-id="<%= o.id %>" class="ui mini button" style="float:right;">详情</button>                             
+                <p style="margin:0;">饭堂：<%= o.canteen_name %></p>   
+              </div>   
+            </div>
+          <% }) %>
+        </div>
+        <div class="ui tab segments accept" data-tab="second"  style="margin:1rem 0;">
+          <% orderlistsAccept.forEach(function(o){ %>
+            <div class="ui orderlist accept segment" id="ao-<%= o.id %>" data-id="<%= o.id %>">
+              <div class="header">悬赏人：<%= o.guest_name %> <span><%= o.order_time %></span><span style="float:right;">悬赏金</span></div>
+              <p style="float:right;margin:0;"><%= o.fee %></p>
+              <p style="margin:0;"> 期望时间:<%= o.expect_time %></p>                                      
+              <div class="content">
+                <button data-id="<%= o.id %>" class="ui mini button" style="float:right;">详情</button>                             
+                <p style="margin:0;">饭堂：<%= o.canteen_name %></p>   
+              </div>   
+            </div>
+          <% }) %>
+        </div>
+        <div class="ui tab segments" data-tab="third"  style="margin:1rem 0;">
+            <% orderlistsMine.forEach(function(o){ %>
+              <div class="ui orderlist mine segment" id="mo-<%= o.id %>" data-id="<%= o.id %>">
+                <div class="header">悬赏人：<%= o.guest_name %> <span><%= o.order_time %></span><span style="float:right;">悬赏金</span></div>
+                <p style="float:right;margin:0;"><%= o.fee %></p>
+                <p style="margin:0;"> 期望时间:<%= o.expect_time %></p>                                      
+                <div class="content">
+                  <button data-id="<%= o.id %>" class="ui mini button" style="float:right;">详情</button>                             
+                  <p style="margin:0;">饭堂：<%= o.canteen_name %></p>   
+                </div>   
+              </div>
+            <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% orderlistsBefore.forEach(function(o){ %>
+    <div class="ui before modal" id="m-<%= o.id %>"  data-id="<%= o.id %>">
+      <i class="close icon"></i>
+      <div class="header">
+        委托人：<%= o.guest_name %>
+      </div>
+      <div class="content">
+        <div class="description" style="margin:3rem;">
+          <p>饭堂：<%= o.canteen_name %></p>
+          <p>委托时间：<%= o.order_time %></p>
+          <p>赏金：<%= o.fee %></p>
+          <p>期望时间：<%= o.expect_time %></p> 
+          <p>菜单</p>
+          <% for(var i in o.shopping_cart){ %>
+            <p style="margin-left:1rem;"> <%= i %>:<%= o.shopping_cart[i] %></p>
+          <% } %>
+        </div>  
+      </div>
+      <% if(userId!=o.guest_id){ %>
+        <div class="actions">  
+          <div class="ui green ok inverted positive button" style="margin-right:5.5rem" data-id="<%= o.id %>">
+            <i class="checkmark icon"></i>
+            接受
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% }) %>  
+  <% orderlistsAccept.forEach(function(o){ %>
+    <div class="ui accept modal" id="a-<%= o.id %>"  data-id="<%= o.id %>">
+      <i class="close icon"></i>
+      <div class="header">
+        委托人：<%= o.guest_name %>
+      </div>
+      <div class="content">
+        <div class="description" style="margin:3rem;">
+          <p>饭堂：<%= o.canteen_name %></p>
+          <p>委托时间：<%= o.order_time %></p>
+          <p>赏金：<%= o.fee %></p>
+          <p>期望时间：<%= o.expect_time %></p> 
+          <p>菜单</p>
+          <% for(var i in o.shopping_cart){ %>
+            <p style="margin-left:1rem;"> <%= i %>:<%= o.shopping_cart[i] %></p>
+          <% } %>
+        </div>  
+      </div>
+      <div class="actions">
+        <% if(o.order_status==1){ %>
+          <div class="ui red  inverted cancel accept button button" data-id="<%= o.id %>">
+            <i class="remove icon"></i>
+            取消
+          </div>
+          <div class="ui green ok inverted positive accept button" style="margin-right:5.5rem" data-id="<%= o.id %>">
+            <i class="checkmark icon"></i>
+            接受
+          </div>
+        <% }else if(o.order_status==2){ %>
+          已完成
+        <% }else if(o.order_status==3){ %>
+          对方放弃悬赏
+        <% }else if(o.order_status==4){ %>
+          你放弃了悬赏
+        <% } %>
+      </div>
+    </div>
+  <% }) %> 
+  <% orderlistsMine.forEach(function(o){ %>
+    <div class="ui mine modal" id="mm-<%= o.id %>"  data-id="<%= o.id %>">
+      <i class="close icon"></i>
+      <div class="header">
+        委托人：<%= o.guest_name %>
+      </div>
+      <div class="content">
+        <div class="description" style="margin:3rem;">
+          <p>饭堂：<%= o.canteen_name %></p>
+          <p>委托时间：<%= o.order_time %></p>
+          <p>赏金：<%= o.fee %></p>
+          <p>期望时间：<%= o.expect_time %></p> 
+          <p>菜单</p>
+          <% for(var i in o.shopping_cart){ %>
+            <p style="margin-left:1rem;"> <%= i %>:<%= o.shopping_cart[i] %></p>
+          <% } %>
+        </div>  
+      </div>
+      <div class="actions">  
+        <div class="ui green ok inverted positive mine button" style="margin-right:5.5rem" data-id="<%= o.id %>">
+          <i class="checkmark icon"></i>
+          接受
+        </div>
+      </div>
+    </div>
+  <% }) %> 
+<% include foot %>
+

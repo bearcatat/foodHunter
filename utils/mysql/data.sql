@@ -11,3 +11,4 @@ insert into dish(dish_name,score,price,canteen_id,picture,description) value('�
 insert into dish(dish_name,score,price,canteen_id,picture,description) value('阿比修斯风鸭肉',0,78,3,'food3_1.jpg','据传是罗马美食家阿比修斯所钟爱的一道美食，焦糖状的蜂蜜闪着鲜亮色泽，涂满一整面鸭肉的香辛料散发着诱人香味，贯穿全身的奢华而又辛辣的芳香，就算咀嚼下去了，那股香味依旧久久蔓延在鼻腔和口腔内，蕴含的香辛料的特性数不胜数，有刺激的辣味，也有微微的甘甜，有清爽的清凉感，也有厚重的涩味，在这道料理中自如地掌控好了这些力量的平衡');
 insert into dish(dish_name,score,price,canteen_id,picture,description) value('法式炖鳗鱼',0,68,3,'food3_2.jpg','经过充分炖煮之后非常送软，在煎烤前用肉桂和红酒腌渍过，增添了一层清爽的风味，用泡发后的洋李用鳗鱼包裹起来，使得鳗鱼那柔软滑嫩的肉脂中，不断有洋李的浓郁果酸满溢开来，再用网油覆盖表层，土豆泥那种粘稠的口感，再加上松松软软的奶油面包，还有鳗鱼的甘美肉脂和洋李的酸味在口中横冲直撞，所有的味道浑然一体');
 
+call add_orderlist(2015150000,1,'{"1":1}',1,'adress001',30);
