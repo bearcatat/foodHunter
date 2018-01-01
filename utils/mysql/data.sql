@@ -12,3 +12,57 @@ insert into dish(dish_name,score,price,canteen_id,picture,description) value('�
 insert into dish(dish_name,score,price,canteen_id,picture,description) value('法式炖鳗鱼',0,68,3,'food3_2.jpg','经过充分炖煮之后非常送软，在煎烤前用肉桂和红酒腌渍过，增添了一层清爽的风味，用泡发后的洋李用鳗鱼包裹起来，使得鳗鱼那柔软滑嫩的肉脂中，不断有洋李的浓郁果酸满溢开来，再用网油覆盖表层，土豆泥那种粘稠的口感，再加上松松软软的奶油面包，还有鳗鱼的甘美肉脂和洋李的酸味在口中横冲直撞，所有的味道浑然一体');
 
 call add_orderlist(2015150000,1,'{"1":1}',1,'adress001',30);
+
+drop PROCEDURE getCommentInfo;
+delimiter //
+create PROCEDURE getCommentInfo(in dish_id int(5)) begin
+  select 
+    c.id id,
+    c.student_id student_id,
+    s.nickname student_name,
+    c.dish_id dish_id,
+    c.content content,
+    c.score score,
+    c.likes likes,
+    c.time time
+  from comment c,student s where c.student_id=s.id and c.dish_id=dish_id order by c.likes desc,c.id;
+end//
+delimiter ;
+
+DROP TRIGGER IF EXISTS `after_delete_orderlist`;
+DROP TRIGGER IF EXISTS `after_insert_orderlist`;
+DROP TRIGGER IF EXISTS `after_update_orderlist`;
+delimiter //
+CREATE TRIGGER `after_insert_comment` AFTER INSERT ON `comment`
+ FOR EACH ROW begin
+declare avgscore float;
+declare c_id int;
+select avg(score) into avgscore from comment where dish_id=new.dish_id;
+update dish set score=avgscore where id=new.dish_id;
+select canteen_id into c_id from dish where id=new.dish_id;
+select avg(score) into avgscore from dish where canteen_id=c_id and score<>0;
+update canteen set score=avgscore where id=c_id;
+end//
+
+CREATE TRIGGER `after_update_comment` AFTER UPDATE ON `comment`
+ FOR EACH ROW begin
+declare avgscore float;
+declare c_id int;
+select avg(score) into avgscore from comment where dish_id=new.dish_id;
+update dish set score=avgscore where id=new.dish_id;
+select canteen_id into c_id from dish where id=new.dish_id;
+select avg(score) into avgscore from dish where canteen_id=c_id and score<>0;
+update canteen set score=avgscore where id=c_id;
+end//
+
+CREATE TRIGGER `after_delete_comment` AFTER DELETE ON `comment`
+ FOR EACH ROW begin
+declare avgscore float;
+declare c_id int;
+select avg(score) into avgscore from comment where dish_id=old.dish_id;
+update dish set score=avgscore where id=old.dish_id;
+select canteen_id into c_id from dish where id=old.dish_id;
+select avg(score) into avgscore from dish where canteen_id=c_id and score<>0;
+update canteen set score=avgscore where id=c_id;
+end//
+delimiter ;

@@ -9,8 +9,7 @@
         <div class="ui pointing dropdown link item">
           <%= user %>
           <div class="menu">
-            <a href="\info" class="item">我的信息</a>
-            <div class="item">我的订单</div>            
+            <a href="\info" class="item">我的信息</a>        
           </div>
         </div>
         <a href="\login" class="item">登出</a>                
@@ -35,7 +34,7 @@
                   </div>
                   <div class="extra content">
                     <label for="">评分:</label>
-                    <div data-rating="<%= d.score %>" data-max-rating="5" class="ui dish small star rating"></div>
+                    <div data-rating="<%= parseInt(d.score) %>" data-max-rating="5" class="ui dish small star rating"></div>
                     <label class="right floated" for="">价格:<span style="color:red"><%= d.price %></span> </label>                              
                   </div>
                 </div>
@@ -55,7 +54,7 @@
                 共<span class="summary num">0</span>份,总计￥<span class="summary money" style="text-align: center;width: 30px;color:rgb(255, 0, 0); font-size:17px;" >0</span>                    
               </div>
               <div class="ui clearing segment">
-                <div class="ui right floated red mini button" onclick="summit()">下单</div>
+                <div class="ui right floated red mini button" onclick="summit()">发布悬赏</div>
               </div>
             </div>
           </div>
@@ -74,13 +73,13 @@
         </div>
         <div class="description" style="width:50%">
           <div class="ui top attached tabular menu">
-            <a class="item active" data-tab="first">描述</a>
-            <a class="item" data-tab="second">评价</a>
+            <a class="item active" data-tab="first<%= d.id %>">描述</a>
+            <a class="comment item" data-tab="second<%= d.id %>" data-id="<%= d.id %>" data-load="0">评价</a>
           </div>
-          <div class="ui bottom attached tab segment active" data-tab="first">
+          <div class="ui bottom attached tab segment active" data-tab="first<%= d.id %>">
             <p><%= d.description %></p>              
           </div>
-          <div class="ui bottom attached tab segment" data-tab="second">
+          <div class="ui bottom attached tab segment" data-tab="second<%= d.id %>">
               <div class="ui comments">
                 <form class="ui comment form" id="co-<%= d.id %>">
                   <div class="field">
@@ -91,18 +90,6 @@
                     <i class="icon edit"></i> 发表
                   </div>
                 </form>
-                <div class="comment">
-                  <div class="content">
-                    <a class="author">Matt</a>
-                    <div class="metadata">
-                      <div data-rating="4" data-max-rating="5" class="ui small dish star rating"></div>
-                      <span class="date">Today at 5:42PM</span>
-                    </div>
-                    <div class="text">
-                      How artistic!
-                    </div>
-                  </div>
-                </div>
               </div> 
           </div>
         </div>

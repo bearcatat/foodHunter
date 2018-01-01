@@ -47,6 +47,9 @@ $(document).ready(function () {
     $('.actions button.minus#b-' + id).css('display', 'inline-block');
     $('i.minus#cb-' + id).css('display', 'inline-block');
     $value.css('display', 'inline-block');
+    let $snum = $('.summary.num');      
+    let snum = parseInt($snum.text());
+    $snum.text(snum+1);
   }
 
   function minusDishNum(id) {
@@ -66,11 +69,13 @@ $(document).ready(function () {
       $value.css('display', 'none');
       $('span#sn-' + id).parent().remove();
     }
+    let $snum = $('.summary.num');      
+    let snum = parseInt($snum.text());
+    $snum.text(snum-1);
   }
 
   $('.ui.rating').rating();    
   $('.ui.dish.rating').rating('disable');
-  $('.menu .item').tab();
   $('.ui.sticky').sticky({
     context: '#canteen'
   });
@@ -92,10 +97,21 @@ $(document).ready(function () {
     minusDishNum(id);
   });
 
+  $('.comment.item').click(function(){
+    let id=$(this).attr('data-id');
+    let load=parseInt($(this).attr('data-load'));
+    if(load==0){
+      addComments(parseInt(id));      
+      $(this).attr('data-load',1);
+    }
+  })
+
 })
 
 function showDetail(id) {
   $('.ui.modal#' + id).modal('show');
+  $('.ui.modal#' + id+' .menu .item').tab();
+  
 }
 
 function summit(){
@@ -149,21 +165,115 @@ function onSummitComment(id){
     alert('请填写评论或评分');
     return;
   }
-  $('.ui.comment.form#co-'+id).after(`
-  <div class="comment">
-    <div class="content">
-      <a class="author">Matt</a>
-      <div class="metadata">
-        <div data-rating="`+score+`" data-max-rating="5" class="ui small star rating"></div>
-        <span class="date">`+new Date()+`</span>
+  $.ajax({
+    type:'post',
+    url:'/api/comment',
+    data:{
+      dish_id:id,
+      content:text.text,
+      score:score
+    },
+    success:function(s){
+      console.log(s);
+      $('#'+id+' .comments').append(`
+      <div class="comment">
+        <div class="content">
+          <a class="author">`+s.userName+`</a>
+          <div class="metadata">
+            <div data-rating="`+score+`" data-max-rating="5" class="ui small star rating"></div>
+            <span class="date">`+new Date().toLocaleString()+`</span>
+            <a class="like">
+              <i class="like icon" data-id="`+id+`" style="cursor:pointer;"></i> <label>0</label> Likes              
+            </a>
+          </div>
+          <div class="text">`+
+            text.text
+          +`</div>
+        </div>
       </div>
-      <div class="text">`+
-        text.text
-      +`</div>
-    </div>
-  </div>
-  `);
-  console.log(score);
-  $('.ui.comment.form#co-'+id).form("set value",'text','');
-  $('.ui.comment.rating#so-'+id).rating('set rating',0);  
+      `);
+      $('.ui.comment.form#co-'+id).form("set value",'text','');
+      $('.ui.comment.rating#so-'+id).rating('set rating',0); 
+      $('.metadata .ui.rating').rating('disable'); 
+      clickLikes();               
+    }
+  })
+}
+
+function addComments(id){
+  console.log(id);
+  $.ajax({
+    type:'get',
+    url:'/api/comment',
+    data:{
+      dish_id:id
+    },
+    success:function(s){
+      console.log(s);
+      let len=s.length,count=0;
+      function loop(i){
+        if(i==len){
+          $('.metadata .ui.rating').rating('disable');
+          clickLikes();
+          return;
+        }
+        v=s[i];        
+        $.ajax({
+          type:'get',
+          url:'/api/like',
+          data:{
+            comment_id:v.id
+          },
+          success:function(like){
+            $('#'+id+' .comments').append(`
+              <div class="comment">
+                <div class="content">
+                  <a class="author">`+v.student_name+`</a>
+                  <div class="metadata" style="width:100%;">
+                    <div data-rating="`+v.score+`" data-max-rating="5" class="ui small dish star rating"></div>
+                    <span class="dat">`+new Date(v.time).toLocaleDateString()+`</span>
+                    <a class="like"  style="float:right;">
+                      <i class="like `+(parseInt(like)==0?'':'red')+` icon" data-id="`+v.id+`" style="cursor:pointer;"></i> <label>`+v.likes+`</label> Likes
+                    </a>
+                  </div>
+                  <div class="text">
+                  `+v.content+`
+                  </div>
+                </div>
+              </div>
+            `)
+            loop(i+1);
+          }
+        })
+      }
+      loop(0);
+    }
+  })
+}
+
+function clickLikes(){
+  $('.like.icon').unbind('click');
+  $('.like.icon').click(function(){
+    let id=$(this).attr('data-id');
+    var that=this;
+    var add=!($(that).hasClass('red'));
+    console.log(id);
+    $.ajax({
+      type:(!add?'delete':'post'),
+      url:'/api/like',
+      data:{
+        comment_id:id
+      },
+      success:function(s){
+        $(that).toggleClass('red');
+        let $like=$(that).next();
+        let like=parseInt($like.text());
+        if(add){
+          $like.text(like+1);
+        }else{
+          $like.text(like-1);
+        }
+      }
+    })
+  })
 }

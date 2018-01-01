@@ -6,6 +6,6 @@ module.exports={
     port:3306,
     user:'test',
     password:'test',
-    database:'foodHunter'
+    database:'f2f'
   }
 }

@@ -70,7 +70,7 @@ router.get('/info',function(req,res,next){
       console.log(err);
       return res.status(500).json('database error');
     }
-    console.log(rows)
+    //console.log(rows)
     res.render('information',{
       user:req.session.user,
       userInfo:rows[0]        
@@ -117,12 +117,12 @@ router.post('/canteen/:id',function(req,res,next){
       console.log(err);
       res.status(500).json('err');
     }else{
-      console.log(rows);
+      //console.log(rows);
       res.status(200).json('ok');
     }
   })
   mysql.getALL('orderlist',(err,rows,fields)=>{
-    console.log(rows);
+    //console.log(rows);
   })
 })
 
@@ -132,22 +132,27 @@ function getAllOrderlistInfo(condition,callback){
     if(err){
       return callback(err);
     }
+    //console.log(condition);
+    //console.log(orows);
     let len=orows.length;
     let orderlist=[];
+    //console.log(len);
     if(len){
-      let i=0;
-      orows.forEach(function(v){
+      function loop(i){
+        if(i==len){
+          //console.log(13);                   
+          return callback(null,orderlist);
+        }
+        v=orows[i];
         mysql.getOrderlistInfo(v.id,(err,data)=>{
           if(err){
             return callback(err);
           }
           orderlist.push(data);
-          i++;
-          if(i==len){
-            return callback(null,orderlist);
-          }
+          loop(i+1);          
         })
-      })
+      }
+      loop(0);
     }else{
       return callback(null,orderlist);
     }
@@ -192,11 +197,20 @@ router.get('/reward',function(req,res,next){
 
 router.put('/reward',function(req,res,next){
   let body=req.body;
-  console.log(body); 
-  mysql.updateById('orderlist',body.id,{
-    order_status:parseInt(body.order_status),
-    courier_id:req.session.userId
-  },function(err){
+  //console.log(body); 
+  let data;
+  if(body.order_status==1){
+    data={
+      order_status:parseInt(body.order_status),
+      courier_id:req.session.userId
+    }
+  }else{
+    data={
+      order_status:parseInt(body.order_status)
+    }
+  }
+  console.log(data);
+  mysql.updateById('orderlist',body.id,data,function(err){
     mysql.getOrderlistInfoBefore(body.id,(err,data)=>{
       if(err){
         console.log(err);
@@ -210,7 +224,7 @@ router.put('/reward',function(req,res,next){
 })
 
 router.get('/api/dish',function(req,res,next){
-  console.log(req.query);
+  //console.log(req.query);
   mysql.find('dish',req.query,(err,rows)=>{
     if(err){
       console.log(err);
@@ -220,8 +234,75 @@ router.get('/api/dish',function(req,res,next){
   })
 })
 
+router.post('/api/comment',function(req,res,next){
+  let data=req.body;
+  data['student_id']=req.session.userId;
+  data['likes']=0;
+  data['time']=new Date();
+  //console.log(data);
+  mysql.insert('comment',data,function(err,rows){
+    if(err){
+      return res.status(500).json('err');
+    }
+    res.status(200).json({
+      userName:req.session.user,
+    });
+  })
+})
 
+router.get('/api/comment',function(req,res,next){
+  mysql.getCommentsByDishId(req.query.dish_id,(err,rows)=>{
+    if(err){
+      console.log(err);
+      return res.status(500).json('err');      
+    }else{
+      res.status(200).json(rows);        
+    }
+  });
+})
 
+router.get('/api/like',function(req,res,next){
+  mysql.find('likes',{
+    student_id:req.session.userId,
+    comment_id:parseInt(req.query.comment_id)
+  },function(err,rows){
+    if(err){
+      console.log(err);
+      return res.status(500).json('err');
+    }else{
+      res.status(200).json(rows.length);
+    }
+  })
+})
 
+router.post('/api/like',function(req,res,next){
+  let data={
+    student_id:req.session.userId,
+    comment_id:parseInt(req.body.comment_id)
+  }
+  mysql.insert('likes',data,(err,rows)=>{
+    if(err){
+      console.log(err);
+      return res.status(500).json('err');
+    }else{
+      res.status(200).json('ok');
+    }
+  })
+})
+
+router.delete('/api/like',function(req,res,next){
+  let data={
+    student_id:req.session.userId,
+    comment_id:parseInt(req.body.comment_id)
+  }
+  mysql.delete('likes',data,(err,rows)=>{
+    if(err){
+      console.log(err);
+      return res.status(500).json('err');
+    }else{
+      res.status(200).json('ok');
+    }
+  })
+})
 
 module.exports = router;

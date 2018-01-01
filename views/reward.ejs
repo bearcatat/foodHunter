@@ -1,5 +1,6 @@
 <% include head %>
   <script type="text/javascript" src="/javascripts/reward.js"></script>
+  <script type="text/javascript" src="/javascripts/dropdown.js"></script>  
   <div class="ui large top inverted menu main">
     <div class="ui container">
       <a href="/" class="header item">首页</a>       
@@ -8,8 +9,7 @@
         <div class="ui pointing dropdown link item">
           <%= user %>
           <div class="menu">
-            <a href="\info" class="item">我的信息</a>
-            <div class="item">我的订单</div>            
+            <a href="\info" class="item">我的信息</a>        
           </div>
         </div>
         <a href="\login" class="item">登出</a>                
@@ -35,11 +35,11 @@
         <div class="ui active tab segments" data-tab="first" style="margin:1rem 0;">
           <% orderlistsBefore.forEach(function(o){ %>
             <div class="ui orderlist before segment" id="l-<%= o.id %>" data-id="<%= o.id %>">
-              <div class="header">悬赏人：<%= o.guest_name %> <span><%= o.order_time %></span><span style="float:right;">悬赏金</span></div>
-              <p style="float:right;margin:0;"><%= o.fee %></p>
-              <p style="margin:0;"> 期望时间:<%= o.expect_time %></p>                                      
+              <div class="header">悬赏人：<%= o.guest_name %> <span><%= new Date(o.order_time).toLocaleString() %></span><span style="float:right; color:red;width:5rem;text-align: center;">悬赏金</span></div>
+              <p style="float:right; color:red;width:5rem;text-align: center;margin:0;"><%= o.fee %></p>
+              <p style="margin:0;"> 期望时间：<%= new Date(o.expect_time).toLocaleString() %></p>                                      
               <div class="content">
-                <button data-id="<%= o.id %>" class="ui mini button" style="float:right;">详情</button>                             
+                <button data-id="<%= o.id %>" class="ui red basic mini button" style="float:right;margin-left:1rem;">详情</button>                             
                 <p style="margin:0;">饭堂：<%= o.canteen_name %></p>   
               </div>   
             </div>
@@ -48,24 +48,24 @@
         <div class="ui tab segments accept" data-tab="second"  style="margin:1rem 0;">
           <% orderlistsAccept.forEach(function(o){ %>
             <div class="ui orderlist accept segment" id="ao-<%= o.id %>" data-id="<%= o.id %>">
-              <div class="header">悬赏人：<%= o.guest_name %> <span><%= o.order_time %></span><span style="float:right;">悬赏金</span></div>
-              <p style="float:right;margin:0;"><%= o.fee %></p>
-              <p style="margin:0;"> 期望时间:<%= o.expect_time %></p>                                      
+              <div class="header">悬赏人：<%= o.guest_name %> <span><%= new Date(o.order_time).toLocaleString() %></span><span style="float:right; color:red;width:5rem;text-align: center;">悬赏金</span></div>
+              <p style="float:right; color:red;width:5rem;text-align: center;margin:0;"><%= o.fee %></p>
+              <p style="margin:0;"> 期望时间：<%= new Date(o.expect_time).toLocaleString() %></p>                                      
               <div class="content">
-                <button data-id="<%= o.id %>" class="ui mini button" style="float:right;">详情</button>                             
+                <button data-id="<%= o.id %>" class="ui red basic mini button" style="float:right;margin-left:1rem;">详情</button>                             
                 <p style="margin:0;">饭堂：<%= o.canteen_name %></p>   
               </div>   
             </div>
           <% }) %>
         </div>
-        <div class="ui tab segments" data-tab="third"  style="margin:1rem 0;">
+        <div class="ui tab segments mine" data-tab="third"  style="margin:1rem 0;">
             <% orderlistsMine.forEach(function(o){ %>
               <div class="ui orderlist mine segment" id="mo-<%= o.id %>" data-id="<%= o.id %>">
-                <div class="header">悬赏人：<%= o.guest_name %> <span><%= o.order_time %></span><span style="float:right;">悬赏金</span></div>
-                <p style="float:right;margin:0;"><%= o.fee %></p>
-                <p style="margin:0;"> 期望时间:<%= o.expect_time %></p>                                      
+                <div class="header">悬赏人：<%= o.guest_name %> <span><%= new Date(o.order_time).toLocaleString() %></span><span style="float:right; color:red;width:5rem;text-align: center;">悬赏金</span></div>
+                <p  style="float:right; color:red;width:5rem;text-align: center;margin:0;"><%= o.fee %></p>
+                <p style="margin:0;"> 期望时间：<%= new Date(o.expect_time).toLocaleString() %></p>                                      
                 <div class="content">
-                  <button data-id="<%= o.id %>" class="ui mini button" style="float:right;">详情</button>                             
+                  <button data-id="<%= o.id %>" class="ui red basic mini button" style="float:right;margin-left:1rem;">详情</button>                             
                   <p style="margin:0;">饭堂：<%= o.canteen_name %></p>   
                 </div>   
               </div>
@@ -83,9 +83,9 @@
       <div class="content">
         <div class="description" style="margin:3rem;">
           <p>饭堂：<%= o.canteen_name %></p>
-          <p>委托时间：<%= o.order_time %></p>
+          <p>委托时间：<%=  new Date(o.order_time).toLocaleString() %></p>
           <p>赏金：<%= o.fee %></p>
-          <p>期望时间：<%= o.expect_time %></p> 
+          <p>期望时间：<%= new Date(o.expect_time).toLocaleString() %></p> 
           <p>菜单</p>
           <% for(var i in o.shopping_cart){ %>
             <p style="margin-left:1rem;"> <%= i %>:<%= o.shopping_cart[i] %></p>
@@ -111,9 +111,9 @@
       <div class="content">
         <div class="description" style="margin:3rem;">
           <p>饭堂：<%= o.canteen_name %></p>
-          <p>委托时间：<%= o.order_time %></p>
+          <p>委托时间：<%= new Date(o.order_time).toLocaleString() %></p>
           <p>赏金：<%= o.fee %></p>
-          <p>期望时间：<%= o.expect_time %></p> 
+          <p>期望时间：<%= new Date(o.expect_time).toLocaleString() %></p> 
           <p>菜单</p>
           <% for(var i in o.shopping_cart){ %>
             <p style="margin-left:1rem;"> <%= i %>:<%= o.shopping_cart[i] %></p>
@@ -124,11 +124,11 @@
         <% if(o.order_status==1){ %>
           <div class="ui red  inverted cancel accept button button" data-id="<%= o.id %>">
             <i class="remove icon"></i>
-            取消
+            放弃任务
           </div>
           <div class="ui green ok inverted positive accept button" style="margin-right:5.5rem" data-id="<%= o.id %>">
             <i class="checkmark icon"></i>
-            接受
+            完成
           </div>
         <% }else if(o.order_status==2){ %>
           已完成
@@ -144,14 +144,24 @@
     <div class="ui mine modal" id="mm-<%= o.id %>"  data-id="<%= o.id %>">
       <i class="close icon"></i>
       <div class="header">
-        委托人：<%= o.guest_name %>
+        <% if(o.order_status==0){ %>
+          没有人接受任务
+        <% }else if(o.order_status==1){ %>
+          <%= o.courier_name %>接受了该任务
+        <% }else if(o.order_status==2){ %>
+          <%= o.courier_name %>已完成该任务
+        <% }else if(o.order_status==3){ %>
+          你放弃悬赏
+        <% }else if(o.order_status==4){ %>
+          <%= o.courier_name %>放弃了任务
+        <% } %>
       </div>
       <div class="content">
         <div class="description" style="margin:3rem;">
           <p>饭堂：<%= o.canteen_name %></p>
-          <p>委托时间：<%= o.order_time %></p>
+          <p>委托时间：<%= new Date(o.order_time).toLocaleString() %></p>
           <p>赏金：<%= o.fee %></p>
-          <p>期望时间：<%= o.expect_time %></p> 
+          <p>期望时间：<%= new Date(o.expect_time).toLocaleString() %></p> 
           <p>菜单</p>
           <% for(var i in o.shopping_cart){ %>
             <p style="margin-left:1rem;"> <%= i %>:<%= o.shopping_cart[i] %></p>
@@ -159,10 +169,19 @@
         </div>  
       </div>
       <div class="actions">  
-        <div class="ui green ok inverted positive mine button" style="margin-right:5.5rem" data-id="<%= o.id %>">
-          <i class="checkmark icon"></i>
-          接受
-        </div>
+        <% if(o.order_status==1||o.order_status==0){ %>
+          <div class="ui red  inverted cancel accept button button" data-id="<%= o.id %>">
+            <i class="remove icon"></i>
+            放弃
+          </div>
+        <% }else if(o.order_status==2){ %>
+          已完成
+        <% }else if(o.order_status==3){ %>
+          你放弃悬赏
+        <% }else if(o.order_status==4){ %>
+          对方放弃了悬赏
+        <% } %>
+      </div>
       </div>
     </div>
   <% }) %> 

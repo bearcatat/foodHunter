@@ -1,6 +1,7 @@
 $(document).ready(function(){
   $('.menu .item').tab();
   acceptOrderList();  
+  mineOrderList();
   $('.orderlist.before button').click(function(){
     let id=$(this).attr('data-id');
     let that=this;
@@ -20,13 +21,13 @@ $(document).ready(function(){
             console.log(s);
             $('#l-'+id).remove();
             $(that).remove();
-            $('.accept.segments').append(`
+            $('.accept.segments').prepend(`
               <div class="ui orderlist accept segment" id="ao-`+id+`" data-id="`+id+`">
-                <div class="header">悬赏人：`+s.guest_name+` <span>`+s.order_time+`</span><span style="float:right;">悬赏金</span></div>
-                <p style="float:right;margin:0;">`+s.fee+`</p>
-                <p style="margin:0;"> 期望时间:`+s.expect_time+`</p>                                      
+                <div class="header">悬赏人：`+s.guest_name+` <span>`+new Date(s.order_time).toLocaleString()+`</span><span style="float:right; color:red;width:5rem;text-align: center;">悬赏金</span></div>
+                <p style="float:right; color:red;width:5rem;text-align: center;margin:0;">`+s.fee+`</p>
+                <p style="margin:0;"> 期望时间：`+new Date(s.expect_time).toLocaleString()+`</p>                                      
                 <div class="content">
-                  <button data-id="`+id+`" class="ui mini button" style="float:right;">详情</button>                             
+                  <button data-id="`+id+`" class="ui red basic mini button" style="float:right;margin-left:1rem;">详情</button>                             
                   <p style="margin:0;">饭堂：`+s.canteen_name+`</p>   
                 </div>   
               </div>
@@ -44,9 +45,9 @@ $(document).ready(function(){
                 <div class="content">
                   <div class="description" style="margin:3rem;">
                     <p>饭堂：`+s.canteen_name+`</p>
-                    <p>委托时间：`+s.order_time+`</p>
+                    <p>委托时间：`+new Date(s.order_time).toLocaleString()+`</p>
                     <p>赏金：`+s.fee+`</p>
-                    <p>期望时间：`+s.expect_time+`</p> 
+                    <p>期望时间：`+new Date(s.expect_time).toLocaleString()+`</p> 
                     <p>菜单</p>`
                     +str+
                   `</div>  
@@ -102,6 +103,31 @@ function acceptOrderList(){
           success:function(s){
             $('#a-'+aid+' .actions').empty();
             $('#a-'+aid+' .actions').append("你放弃了悬赏");            
+          }
+        })
+      }
+    }).modal('show');
+  })
+}
+
+function mineOrderList(){
+  $('.mine.segments button').click(function(){
+    let aid=$(this).attr('data-id');
+    let data=
+    $('.ui.mine.modal#mm-'+aid).modal({
+     // closable:false,
+      onDeny:function(){
+        $.ajax({
+          type:'put',
+          url:window.location.pathname,
+          data:{
+            id:parseInt(aid),
+            order_status:3
+          },
+          success:function(s){
+            $('#mm-'+aid+' .actions').empty();
+            $('#mm-'+aid+' .actions').append("你放弃了悬赏");  
+            $('#mm-'+aid+' .header').append("你放弃了悬赏");                                  
           }
         })
       }

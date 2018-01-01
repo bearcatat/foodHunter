@@ -9,8 +9,7 @@
         <div class="ui pointing dropdown link item">
           <%= user %>
           <div class="menu">
-            <a href="\info" class="item">我的信息</a>
-            <div class="item">我的订单</div>            
+            <a href="\info" class="item">我的信息</a>      
           </div>
         </div>
         <a href="\login" class="item">登出</a>                
@@ -23,7 +22,7 @@
     <% rows.forEach(function(r){ %>      
       <a href="/canteen/<%= r.id %>" class="column">
         <div class="ui link card">
-          <img class="ui medium image" src="/images/canteen.jpg" alt="">
+          <img class="ui medium image" src="/images/<%= r.picture %>" alt="">
           <div class="content">
             <div class="header">
               <%= r.canteen_name %>
@@ -34,7 +33,7 @@
           </div>
           <div class="extra content">
             <label for="">评分:</label>
-            <div data-rating="<%= r.score %>" data-max-rating="5" class="ui small star rating"></div>
+            <div data-rating="<%= parseInt(r.score) %>" data-max-rating="5" class="ui small star rating"></div>
           </div>
         </div>
       </a>
